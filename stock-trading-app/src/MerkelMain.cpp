@@ -193,9 +193,27 @@ void MerkelMain::processUserOption(const std::string& userOption)
     
     if (userOption == "help"){
         
-         std::cout << "The available commands are help, help <cmd>, avg, time," << std::endl;
+         std::cout << "The available commands are help, help <cmd>, avg, time, step, min, max, prod, predict" << std::endl;
 
     }
+
+     if (userOption =="prod"){
+         std::cout << "advisorbot> Available products: "  << std::endl;
+         std::cout << "advisorbot> ";
+      for (std::string const& p : orderBook.getKnownProducts())
+        {
+            if ( p ==  orderBook.getKnownProducts().at(0))
+                 std::cout << p  ;
+            
+            else 
+            std::cout << ", " << p ;
+            
+
+        }
+        std::cout << std::endl;
+    }
+
+
 
     // if (userOption == 0) // bad input
     // {
