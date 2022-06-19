@@ -20,8 +20,8 @@ class MerkelMain
         void enterBid();
         void printWallet();
         void gotoNextTimeframe();
-        int getUserOption();
-        void processUserOption(int userOption);
+        std::string getUserOption();
+        void processUserOption(const std::string& userOption);
 
         std::string currentTime;
 

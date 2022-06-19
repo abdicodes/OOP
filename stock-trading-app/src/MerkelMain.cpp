@@ -11,7 +11,7 @@ MerkelMain::MerkelMain()
 
 void MerkelMain::init()
 {
-    int input;
+    std::string input;
     currentTime = orderBook.getEarliestTime();
 
     wallet.insertCurrency("BTC", 10);
@@ -27,22 +27,25 @@ void MerkelMain::init()
 
 void MerkelMain::printMenu()
 {
-    // 1 print help
-    std::cout << "1: Print help " << std::endl;
-    // 2 print exchange stats
-    std::cout << "2: Print exchange stats" << std::endl;
-    // 3 make an offer
-    std::cout << "3: Make an offer " << std::endl;
-    // 4 make a bid 
-    std::cout << "4: Make a bid " << std::endl;
-    // 5 print wallet
-    std::cout << "5: Print wallet " << std::endl;
-    // 6 continue   
-    std::cout << "6: Continue " << std::endl;
 
-    std::cout << "============== " << std::endl;
+   
+   std::cout << " advisorbot> Please enter a command, or help for a list of commands"<<std::endl;
+    // // 1 print help
+    // std::cout << "1: Print help " << std::endl;
+    // // 2 print exchange stats
+    // std::cout << "2: Print exchange stats" << std::endl;
+    // // 3 make an offer
+    // std::cout << "3: Make an offer " << std::endl;
+    // // 4 make a bid 
+    // std::cout << "4: Make a bid " << std::endl;
+    // // 5 print wallet
+    // std::cout << "5: Print wallet " << std::endl;
+    // // 6 continue   
+    // std::cout << "6: Continue " << std::endl;
 
-    std::cout << "Current time is: " << currentTime << std::endl;
+    // std::cout << "============== " << std::endl;
+
+    // std::cout << "Current time is: " << currentTime << std::endl;
 }
 
 void MerkelMain::printHelp()
@@ -64,22 +67,7 @@ void MerkelMain::printMarketStats()
 
 
     }
-    // std::cout << "OrderBook contains :  " << orders.size() << " entries" << std::endl;
-    // unsigned int bids = 0;
-    // unsigned int asks = 0;
-    // for (OrderBookEntry& e : orders)
-    // {
-    //     if (e.orderType == OrderBookType::ask)
-    //     {
-    //         asks ++;
-    //     }
-    //     if (e.orderType == OrderBookType::bid)
-    //     {
-    //         bids ++;
-    //     }  
-    // }    
-    // std::cout << "OrderBook asks:  " << asks << " bids:" << bids << std::endl;
-
+    
 }
 
 void MerkelMain::enterAsk()
@@ -183,50 +171,58 @@ void MerkelMain::gotoNextTimeframe()
     currentTime = orderBook.getNextTime(currentTime);
 }
  
-int MerkelMain::getUserOption()
+std::string MerkelMain::getUserOption()
 {
-    int userOption = 0;
+    // int userOption = 0;
     std::string line;
-    std::cout << "Type in 1-6" << std::endl;
-    std::getline(std::cin, line);
-    try{
-        userOption = std::stoi(line);
-    }catch(const std::exception& e)
-    {
-        // 
-    }
-    std::cout << "You chose: " << userOption << std::endl;
-    return userOption;
+    // // std::cout << "Type in 1-6" << std::endl;
+     std::getline(std::cin, line);
+    // try{
+    //     userOption = std::stoi(line);
+    // }catch(const std::exception& e)
+    // {
+    //     // 
+    // }
+    // std::cout << "You chose: " << userOption << std::endl;
+    // return userOption;
+    return line;
 }
 
-void MerkelMain::processUserOption(int userOption)
+void MerkelMain::processUserOption(const std::string& userOption)
 {
-    if (userOption == 0) // bad input
-    {
-        std::cout << "Invalid choice. Choose 1-6" << std::endl;
+    
+    if (userOption == "help"){
+        
+         std::cout << "The available commands are help, help <cmd>, avg, time," << std::endl;
+
     }
-    if (userOption == 1) 
-    {
-        printHelp();
-    }
-    if (userOption == 2) 
-    {
-        printMarketStats();
-    }
-    if (userOption == 3) 
-    {
-        enterAsk();
-    }
-    if (userOption == 4) 
-    {
-        enterBid();
-    }
-    if (userOption == 5) 
-    {
-        printWallet();
-    }
-    if (userOption == 6) 
-    {
-        gotoNextTimeframe();
-    }       
+
+    // if (userOption == 0) // bad input
+    // {
+    //     std::cout << "Invalid choice. Choose 1-6" << std::endl;
+    // }
+    // if (userOption == 1) 
+    // {
+    //     printHelp();
+    // }
+    // if (userOption == 2) 
+    // {
+    //     printMarketStats();
+    // }
+    // if (userOption == 3) 
+    // {
+    //     enterAsk();
+    // }
+    // if (userOption == 4) 
+    // {
+    //     enterBid();
+    // }
+    // if (userOption == 5) 
+    // {
+    //     printWallet();
+    // }
+    // if (userOption == 6) 
+    // {
+    //     gotoNextTimeframe();
+    // }       
 }
