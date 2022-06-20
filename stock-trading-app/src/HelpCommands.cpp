@@ -8,11 +8,11 @@ HelpCommands::HelpCommands ()
 {
 
 }
-void HelpCommands::helpMenuHandler( std::string help)
+void HelpCommands::helpMenuHandler( const std::string& help)
 {
 std::cout << "The available commands are help, help <cmd>, avg, time, step, min, max, prod, predict" << std::endl;
 }
- void HelpCommands::helpMenuHandler( std::string help ,std::string cmd) 
+ void HelpCommands::helpMenuHandler( const std::string& help ,const std::string& cmd) 
 
  
                                       

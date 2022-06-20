@@ -217,14 +217,20 @@ void MerkelMain::processUserOption(const std::string& userOption)
                 //this will send input to helpMenuHandler class to display appropriate message.
                 HelpCommands::helpMenuHandler(tokens[0]);  
             }
+
             if(tokens[0] == "time")
             {
-                std::cout<< currentTime << std::endl;
+                std::cout<< "advisorbot> Current time is: "<<currentTime << std::endl;
+            }
+            if(tokens[0] == "step")
+            {
+                currentTime = orderBook.getNextTime(currentTime);
+                 std::cout<< "advisorbot> Current time moved to: "<<currentTime << std::endl;
             }
         }
-        if (tokens.size() == 2)
+        if (tokens.size() == 2 && tokens[0]=="help")
         {
-            
+            HelpCommands::helpMenuHandler(tokens[0],tokens[1]);
         }
     }
     catch(const std::exception& e){
@@ -236,26 +242,28 @@ void MerkelMain::processUserOption(const std::string& userOption)
 
     // }
 
-     if (userOption =="prod"){
+    //  if (userOption =="prod"){
         
-    }
-    try{
-        std::vector<std::string> tokens = CSVReader::tokenise( userOption , ' ');
-        if ( tokens[0] == "help") {
-            if (tokens.size() == 2){
+    // }
+    // try{
+    //     std::vector<std::string> tokens = CSVReader::tokenise( userOption , ' ');
+    //     if ( tokens[0] == "help") {
+    //         if (tokens.size() == 2){
 
-            }
-        } {
+    //         }
+    //     } {
           
-            HelpCommands::helpMenuHandler(tokens[1]);
+    //         HelpCommands::helpMenuHandler(tokens[1]);
 
           
 
-        };
-    }
-    catch(const std::exception& e){
-        std::cout << "Bad input boy!" << std::endl;
-    }
+    //     };
+    // }
+    // catch(const std::exception& e){
+    //     std::cout << "Bad input boy!" << std::endl;
+    // }
+
+
     // if (CSVReader::tokenise(const userOption &, " ")
 // )
 
