@@ -6,7 +6,8 @@ MathClass::MathClass()
 {
 
 }
-void MathClass::calculateMin()
+  void minCal( const std::string& product, const std::string& time, BidAsk )
+
 {
     
 }

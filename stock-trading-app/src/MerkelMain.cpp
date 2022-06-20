@@ -4,6 +4,7 @@
 #include "OrderBookEntry.h"
 #include "CSVReader.h"
 #include "HelpCommands.h"
+#include "MathClass.h"
 
 MerkelMain::MerkelMain()
 {
@@ -165,27 +166,15 @@ void MerkelMain::gotoNextTimeframe()
                 // update the wallet
                 wallet.processSale(sale);
             }
-        }
-        
+        } 
     }
-
     currentTime = orderBook.getNextTime(currentTime);
 }
  
 std::string MerkelMain::getUserOption()
 {
-    // int userOption = 0;
     std::string line;
-    // // std::cout << "Type in 1-6" << std::endl;
-     std::getline(std::cin, line);
-    // try{
-    //     userOption = std::stoi(line);
-    // }catch(const std::exception& e)
-    // {
-    //     // 
-    // }
-    // std::cout << "You chose: " << userOption << std::endl;
-    // return userOption;
+    std::getline(std::cin, line);
     return line;
 }
 
@@ -194,6 +183,10 @@ void MerkelMain::processUserOption(const std::string& userOption)
     std::vector<std::string> tokens = CSVReader::tokenise( userOption , ' ');
 
     try{
+        if (tokens.size() > 4)
+        {
+            std::cout << "Too many arguments Enter help for more information" << std::endl;
+        }
         if (tokens.size() == 1){
             if (tokens[0]== "prod")
             {
@@ -232,9 +225,30 @@ void MerkelMain::processUserOption(const std::string& userOption)
         {
             HelpCommands::helpMenuHandler(tokens[0],tokens[1]);
         }
+        if (tokens.size() == 3 &&  
+            MerkelMain::productValidator(orderBook.getKnownProducts(), tokens[1]) &&
+            tokens[3] == "bid" || "ask")
+        {
+            if ( tokens[0] == "min" || "max" && 
+                MerkelMain::productValidator(orderBook.getKnownProducts(), tokens[1]) &&
+                tokens[3] == "bid" || "ask")
+            {
+                std::vector<OrderBookEntry> entries = orderBook.getOrders(OrderBookEntry::stringToOrderBookType(tokens[2]), tokens[1], currentTime);
+                if (tokens[0] == "min")
+                {
+                    double min = OrderBook::getLowPrice(entries);
+                    std::cout << "advisorbot> lowest " << tokens[2] <<  " value in the current time: "<< min << std::endl;
+                }
+                if (tokens[0] == "max")
+                {
+                    double max = OrderBook::getHighPrice(entries);
+                    std::cout << "advisorbot> highest " << tokens[2] <<  " value in the current time: "<< max << std::endl;
+                }
+            }
+        }
     }
     catch(const std::exception& e){
-
+        std::cout << "invalid input try help" << std::endl;
     }
     // if (userOption == "help"){
         
@@ -295,4 +309,16 @@ void MerkelMain::processUserOption(const std::string& userOption)
     // {
     //     gotoNextTimeframe();
     // }       
+}
+
+bool MerkelMain::productValidator(const std::vector<std::string>& entries, const std::string& tokenInput)
+{
+
+    // borrowed this line of code from stackoverflow, it finds if an item exists in a victor in a sufficient way.
+    if (std::find(entries.begin(), entries.end(), tokenInput) != entries.end())
+        return true;
+    
+    else
+        return false;
+    
 }
