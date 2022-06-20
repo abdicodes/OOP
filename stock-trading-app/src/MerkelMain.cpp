@@ -15,7 +15,7 @@ void MerkelMain::init()
     std::string input;
     currentTime = orderBook.getEarliestTime();
 
-    wallet.insertCurrency("BTC", 10);
+    // wallet.insertCurrency("BTC", 10);
 
     while(true)
     {
@@ -191,37 +191,65 @@ std::string MerkelMain::getUserOption()
 
 void MerkelMain::processUserOption(const std::string& userOption)
 {
-    
-    if (userOption == "help"){
-        
-         std::cout << "The available commands are help, help <cmd>, avg, time, step, min, max, prod, predict" << std::endl;
+    std::vector<std::string> tokens = CSVReader::tokenise( userOption , ' ');
+
+    try{
+        if (tokens.size() == 1){
+            if (tokens[0]== "prod")
+            {
+                // this forloop will list all available products from orderBook object
+                 std::cout << "advisorbot> Available products: "  << std::endl;
+                 std::cout << "advisorbot> ";
+                 for (std::string const& p : orderBook.getKnownProducts())
+        {
+            // this condition to parse comma correctly between products so the first product does not require comma infront.
+                if ( p ==  orderBook.getKnownProducts().at(0))
+                     std::cout << p  ;
+            
+                 else 
+                     std::cout << ", " << p ;
+        }
+                 std::cout << std::endl;
+            }
+
+            if (tokens[0]== "help")
+            {   
+                //this will send input to helpMenuHandler class to display appropriate message.
+                HelpCommands::helpMenuHandler(tokens[0]);  
+            }
+            if(tokens[0] == "time")
+            {
+                std::cout<< currentTime << std::endl;
+            }
+        }
+        if (tokens.size() == 2)
+        {
+            
+        }
+    }
+    catch(const std::exception& e){
 
     }
+    // if (userOption == "help"){
+        
+    //      std::cout << "The available commands are help, help <cmd>, avg, time, step, min, max, prod, predict" << std::endl;
+
+    // }
 
      if (userOption =="prod"){
-         std::cout << "advisorbot> Available products: "  << std::endl;
-         std::cout << "advisorbot> ";
-      for (std::string const& p : orderBook.getKnownProducts())
-        {
-            if ( p ==  orderBook.getKnownProducts().at(0))
-                 std::cout << p  ;
-            
-            else 
-            std::cout << ", " << p ;
-            
-
-        }
-        std::cout << std::endl;
+        
     }
     try{
         std::vector<std::string> tokens = CSVReader::tokenise( userOption , ' ');
-        if ( tokens[0] == "help" && tokens.size() == 2){
-            // do something! 
+        if ( tokens[0] == "help") {
+            if (tokens.size() == 2){
+
+            }
+        } {
+          
             HelpCommands::helpMenuHandler(tokens[1]);
 
-            // std::string temp = HelpCommands::helpMenuHandler(std tokens[1]);
-            // std::cout << "hello" <<std::endl;
-            // std::cout << tokens[1]<<std::endl;
+          
 
         };
     }
