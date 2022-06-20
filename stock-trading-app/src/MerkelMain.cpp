@@ -29,8 +29,10 @@ void MerkelMain::init()
 void MerkelMain::printMenu()
 {
 
-   
-   std::cout << " advisorbot> Please enter a command, or help for a list of commands"<<std::endl;
+   // to add an empty line before the execution
+   std::cout<< " " <<std::endl;
+
+   std::cout << "advisorbot> Please enter a command, or help for a list of commands"<<std::endl;
     // // 1 print help
     // std::cout << "1: Print help " << std::endl;
     // // 2 print exchange stats
@@ -64,8 +66,6 @@ void MerkelMain::printMarketStats()
         std::cout << "Asks seen: " << entries.size() << std::endl;
         std::cout << "Max ask: " << OrderBook::getHighPrice(entries) << std::endl;
         std::cout << "Min ask: " << OrderBook::getLowPrice(entries) << std::endl;
-
-
 
     }
     
@@ -217,10 +217,11 @@ void MerkelMain::processUserOption(const std::string& userOption)
         std::vector<std::string> tokens = CSVReader::tokenise( userOption , ' ');
         if ( tokens[0] == "help" && tokens.size() == 2){
             // do something! 
-            // HelpCommands::helpMenuHandler(tokens[1]);
+            HelpCommands::helpMenuHandler(tokens[1]);
+
             // std::string temp = HelpCommands::helpMenuHandler(std tokens[1]);
             // std::cout << "hello" <<std::endl;
-            // std::cout << temp<<std::endl;
+            // std::cout << tokens[1]<<std::endl;
 
         };
     }

@@ -10,20 +10,21 @@ HelpCommands::HelpCommands ()
 }
 
  void HelpCommands::helpMenuHandler(  std::string cmd) 
-                                        
+                                      
 {
+    // to add an empty line before the execution
+    std::cout<< " " <<std::endl;
+
     if ( cmd == "prod")
     {
-        std::cout << "Enter prod to list all available products for trading " <<std::endl;
-         
+        std::cout << "Enter prod to list all available products for trading " <<std::endl;      
     }
-   else if (cmd == "min")
+    else if (cmd == "min")
     {
         std::cout << "Enter min prodcut <order type> e.g. min ETH/BTC ask " <<std::endl;
-        std::cout <<  "Purpose: find minimum bid or ask for product in current time step" <<std::endl;
-        
+        std::cout <<  "Purpose: find minimum bid or ask for product in current time step" <<std::endl; 
     }
-    else if (cmd == "max ")
+    else if (cmd == "max")
     {
         std::cout << "Enter min prodcut <order type> e.g. max ETH/BTC ask " <<std::endl;
         std::cout <<  "Purpose: find maximum bid or ask for product in current time step" <<std::endl;
@@ -33,13 +34,19 @@ HelpCommands::HelpCommands ()
         std::cout << "Enter avg prodcut <order type> <time steps> e.g. avg ETH/BTC ask 10" <<std::endl;
         std::cout <<  "compute average ask or bid for the sent product over the sent number of time steps" <<std::endl;
     }
- else if (cmd == "predict ")
+    else if (cmd == "predict")
     {
-        std::cout << "Enter  predict <max/min> product <order type> e.g. predcit max  ETH/BTC ask" <<std::endl;
-         std::cout <<  " Purpose: predict max or min ask or bid for the sent product for the next timestep" <<std::endl;
-        
-     
+        std::cout << "Enter  predict <max/min> product <order type> e.g. predcit max ETH/BTC ask" <<std::endl;
+        std::cout <<  "Purpose: predict max or min ask or bid for the sent product for the next timestep" <<std::endl;
     }
-else 
- std::cout << "Command is not found Enter help to list all available commands" << std::endl;
+     else if (cmd == "time")
+    {
+        std::cout << "Enter time to view current time in dataset, i.e. which timeframe are we looking at" <<std::endl;
+    }
+      else if (cmd == "step")
+    {
+        std::cout << "Enter  step to move to next time step" <<std::endl;
+    }
+    else 
+        std::cout << "Command is not found Enter help to list all available commands" << std::endl;
 }
