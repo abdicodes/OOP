@@ -32,7 +32,7 @@ std::vector<OrderBookEntry> CSVReader::readCSV(std::string csvFilename)
     return entries; 
 }
 
-std::vector<std::string> CSVReader::tokenise(std::string csvLine, char separator)
+std::vector<std::string> CSVReader::tokenise( std::string csvLine, char separator)
 {
    std::vector<std::string> tokens;
    signed int start, end;

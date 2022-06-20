@@ -3,6 +3,7 @@
 #include <vector>
 #include "OrderBookEntry.h"
 #include "CSVReader.h"
+#include "HelpCommands.h"
 
 MerkelMain::MerkelMain()
 {
@@ -212,8 +213,22 @@ void MerkelMain::processUserOption(const std::string& userOption)
         }
         std::cout << std::endl;
     }
+    try{
+        std::vector<std::string> tokens = CSVReader::tokenise( userOption , ' ');
+        if ( tokens[0] == "help" && tokens.size() == 2){
+            // do something! 
+            // HelpCommands::helpMenuHandler(tokens[1]);
+            // std::string temp = HelpCommands::helpMenuHandler(std tokens[1]);
+            // std::cout << "hello" <<std::endl;
+            // std::cout << temp<<std::endl;
 
-
+        };
+    }
+    catch(const std::exception& e){
+        std::cout << "Bad input boy!" << std::endl;
+    }
+    // if (CSVReader::tokenise(const userOption &, " ")
+// )
 
     // if (userOption == 0) // bad input
     // {
