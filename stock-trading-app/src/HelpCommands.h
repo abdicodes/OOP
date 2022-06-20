@@ -12,6 +12,7 @@ class HelpCommands
        /** a function that outputs in the console help cmd commands
         *  takes the cmd  argument that comes after help  */
      static void helpMenuHandler( std::string cmd);
+      static void helpMenuHandler( std::string help, std::string cmd);
     
 };
 
