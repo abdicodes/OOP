@@ -4,8 +4,6 @@
 #include "OrderBookEntry.h"
 #include "CSVReader.h"
 #include "HelpCommands.h"
-#include "MathClass.h"
-
 MerkelMain::MerkelMain()
 {
 
@@ -183,10 +181,6 @@ void MerkelMain::processUserOption(const std::string& userOption)
     std::vector<std::string> tokens = CSVReader::tokenise( userOption , ' ');
 
     try{
-        if (tokens.size() > 4)
-        {
-            std::cout << "Too many arguments Enter help for more information" << std::endl;
-        }
         if (tokens.size() == 1){
             if (tokens[0]== "prod")
             {
@@ -194,15 +188,14 @@ void MerkelMain::processUserOption(const std::string& userOption)
                  std::cout << "advisorbot> Available products: "  << std::endl;
                  std::cout << "advisorbot> ";
                  for (std::string const& p : orderBook.getKnownProducts())
-        {
+                    {
             // this condition to parse comma correctly between products so the first product does not require comma infront.
-                if ( p ==  orderBook.getKnownProducts().at(0))
-                     std::cout << p  ;
-            
-                 else 
+                     if ( p ==  orderBook.getKnownProducts().at(0))
+                         std::cout << p;
+                    else 
                      std::cout << ", " << p ;
-        }
-                 std::cout << std::endl;
+                     }
+                     std::cout << std::endl;
             }
 
             if (tokens[0]== "help")
@@ -221,11 +214,11 @@ void MerkelMain::processUserOption(const std::string& userOption)
                  std::cout<< "advisorbot> Current time moved to: "<<currentTime << std::endl;
             }
         }
-        if (tokens.size() == 2 && tokens[0]=="help")
+        else if (tokens.size() == 2 && tokens[0]=="help")
         {
             HelpCommands::helpMenuHandler(tokens[0],tokens[1]);
         }
-        if (tokens.size() == 3 &&  
+        else if (tokens.size() == 3 &&  
             MerkelMain::productValidator(orderBook.getKnownProducts(), tokens[1]) &&
             tokens[3] == "bid" || "ask")
         {
@@ -233,17 +226,26 @@ void MerkelMain::processUserOption(const std::string& userOption)
                 MerkelMain::productValidator(orderBook.getKnownProducts(), tokens[1]) &&
                 tokens[3] == "bid" || "ask")
             {
-                std::vector<OrderBookEntry> entries = orderBook.getOrders(OrderBookEntry::stringToOrderBookType(tokens[2]), tokens[1], currentTime);
+               
                 if (tokens[0] == "min")
                 {
-                    double min = OrderBook::getLowPrice(entries);
+                    double min = OrderBook::getLowPrice(orderBook.getOrders(OrderBookEntry::stringToOrderBookType(tokens[2]), tokens[1], currentTime));
                     std::cout << "advisorbot> lowest " << tokens[2] <<  " value in the current time: "<< min << std::endl;
                 }
                 if (tokens[0] == "max")
                 {
-                    double max = OrderBook::getHighPrice(entries);
-                    std::cout << "advisorbot> highest " << tokens[2] <<  " value in the current time: "<< max << std::endl;
+                     double max = OrderBook::getHighPrice(orderBook.getOrders(OrderBookEntry::stringToOrderBookType(tokens[2]), tokens[1], currentTime));
+                    std::cout << "advisorbot> highest " << tokens[2] <<  " value in the current time: " << max << std::endl;
                 }
+            }
+        }
+        if ( tokens.size() == 4)
+        {
+            if (tokens[0] == "avg" )
+            // &&
+            //     MerkelMain::productValidator(orderBook.getKnownProducts(), tokens[1])  )
+            {
+                orderBook.getAvg("BTC/USDT",currentTime,0, OrderBookType::ask);
             }
         }
     }

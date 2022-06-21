@@ -1,8 +1,10 @@
 #include "OrderBook.h"
 #include "CSVReader.h"
+#include <algorithm>
 #include <map>
 #include <algorithm>
 #include <iostream>
+#include <numeric>
 
 
 /** construct, reading a csv data file */
@@ -50,21 +52,115 @@ std::vector<OrderBookEntry> OrderBook::getOrders(const OrderBookType& type,
 }
 
 
-double OrderBook::getHighPrice(std::vector<OrderBookEntry>& orders)
+double OrderBook::getHighPrice(const std::vector<OrderBookEntry>& orders)
 {
     double max = orders[0].price;
-    for (OrderBookEntry& e : orders)
+    for (const OrderBookEntry& e : orders)
     {
         if (e.price > max)max = e.price;
     }
     return max;
 }
 
+double OrderBook::getAvg( const std::string& product, const std::string& currenTime, const  int& steps, const OrderBookType& orderType  )
+{
+    int timeSteps = steps;
+    std::vector<std::string> timestamp;
+    double sum = 0;
+     double  length = 0;
+    std::map<std::string,bool> stampMap;
+    std::vector<std::string> timeStamps_steps;
+     std::cout << "time steps before: "<<timeSteps << std::endl;
 
-double OrderBook::getLowPrice(std::vector<OrderBookEntry>& orders)
+    for (OrderBookEntry& e : orders)
+    {
+        stampMap[e.timestamp] = true;
+    }
+         for (auto const& e : stampMap)
+    {
+        if ( e.first <= currenTime)
+        {
+            timestamp.push_back(e.first);
+        }
+        
+    }
+    std::sort(timestamp.begin(), timestamp.end(), OrderBookEntry::reverseCompare);
+
+    for ( int k = 0; k < timestamp.size() ; ++k)
+    {
+        if ( timeSteps < 0)
+            break;
+        
+        timeStamps_steps.push_back(timestamp[k]);
+        -- timeSteps;
+    }
+
+   
+    for (int i = 0; i < orders.size(); ++i){
+        for (int j = 0; j < timeStamps_steps.size(); ++j){
+            if (orders[i].timestamp == timeStamps_steps[j]){
+              
+                if (orders[i].orderType == orderType){
+                    if (orders[i].product == product){
+                        sum+= orders[i].price * orders[i].amount  ;
+                        length+= orders[i].amount ;
+                    }
+                }
+            }
+        }
+    }
+    std::cout << "average is: "<< sum / length << " length "<< length<<std::endl;  
+ 
+    
+    // while(timeSteps>= 0)
+    // {
+
+    //      for ( int i = orders.size() - 1 ; i >= 0 ; --i)
+    //     {
+            
+    //         if (time == orders[i].timestamp )
+    //         {
+    //             values.push_back(orders[i].timestamp);
+    //         }
+    //          if (time < orders[i].timestamp )
+    //         {
+    //             time =  orders[i].timestamp;
+    //            -- timeSteps ;
+    //             ++ i;
+    //         }
+
+    //         }
+       ///////
+        // for ( int i = orders.size() - 1 ; i >= 0 ; --i)
+        // {
+            
+        //     if (time == orders[i].timestamp && 
+        //         product == orders[i].product &&
+        //         orderType == orders[i].orderType )
+        //     {
+        //         values.push_back(orders[i].price);
+        //     }
+        //      if (time < orders[i].timestamp )
+        //     {
+        //         time =  orders[i].timestamp;
+        //        -- timeSteps ;
+        //         ++ i;
+        //     }
+
+        //     }
+    // }
+    //  std::cout << "after loop"<<std::endl;
+    // std::cout << values.size()<<std::endl;
+//     double sum = std::accumulate(values.begin(), values.end(), 0);
+//     return sum / values.size();
+return 0;
+}
+
+
+double OrderBook::getLowPrice(const std::vector<OrderBookEntry>& orders)
 {
     double min = orders[0].price;
-    for (OrderBookEntry& e : orders)
+    for (const OrderBookEntry& e : orders)
     {
         if (e.price < min)min = e.price;
     }

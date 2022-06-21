@@ -28,8 +28,9 @@ class OrderBook
 
         std::vector<OrderBookEntry> matchAsksToBids(std::string product, std::string timestamp);
 
-        static double getHighPrice(std::vector<OrderBookEntry>& orders);
-        static double getLowPrice(std::vector<OrderBookEntry>& orders);
+        static double getHighPrice(const std::vector<OrderBookEntry>& orders);
+        static double getLowPrice(const std::vector<OrderBookEntry>& orders);
+         double getAvg( const std::string& product, const std::string& currenTime,const  int& steps, const OrderBookType& orderType );
 
     private:
         std::vector<OrderBookEntry> orders;
