@@ -198,27 +198,28 @@ void MerkelMain::processUserOption(const std::string& userOption)
                      std::cout << std::endl;
             }
 
-            if (tokens[0]== "help")
+             if (tokens[0]== "help")
             {   
                 //this will send input to helpMenuHandler class to display appropriate message.
                 HelpCommands::helpMenuHandler(tokens[0]);  
             }
 
-            if(tokens[0] == "time")
+             if(tokens[0] == "time")
             {
                 std::cout<< "advisorbot> Current time is: "<<currentTime << std::endl;
             }
-            if(tokens[0] == "step")
+             if(tokens[0] == "step")
             {
                 currentTime = orderBook.getNextTime(currentTime);
                  std::cout<< "advisorbot> Current time moved to: "<<currentTime << std::endl;
             }
+            
         }
-        else if (tokens.size() == 2 && tokens[0]=="help")
+         if (tokens.size() == 2 && tokens[0]=="help")
         {
             HelpCommands::helpMenuHandler(tokens[0],tokens[1]);
         }
-        else if (tokens.size() == 3 &&  
+         if (tokens.size() == 3 &&  
             MerkelMain::productValidator(orderBook.getKnownProducts(), tokens[1]) &&
             tokens[3] == "bid" || "ask")
         {
@@ -232,14 +233,16 @@ void MerkelMain::processUserOption(const std::string& userOption)
                     double min = OrderBook::getLowPrice(orderBook.getOrders(OrderBookEntry::stringToOrderBookType(tokens[2]), tokens[1], currentTime));
                     std::cout << "advisorbot> lowest " << tokens[2] <<  " value in the current time: "<< min << std::endl;
                 }
-                if (tokens[0] == "max")
+                 if (tokens[0] == "max")
                 {
                      double max = OrderBook::getHighPrice(orderBook.getOrders(OrderBookEntry::stringToOrderBookType(tokens[2]), tokens[1], currentTime));
                     std::cout << "advisorbot> highest " << tokens[2] <<  " value in the current time: " << max << std::endl;
                 }
+           
             }
+            
         }
-        if ( tokens.size() == 4)
+         if ( tokens.size() == 4)
         {
             if (tokens[0] == "avg" )
             // &&
@@ -247,7 +250,12 @@ void MerkelMain::processUserOption(const std::string& userOption)
             {
                 orderBook.getAvg("BTC/USDT",currentTime,0, OrderBookType::ask);
             }
+             if (tokens[0] == "predict" )
+                {
+                    orderBook.predict(tokens[2], currentTime, OrderBookEntry::stringToOrderBookType(tokens[3]), tokens[1]);
+                }
         }
+        
     }
     catch(const std::exception& e){
         std::cout << "invalid input try help" << std::endl;

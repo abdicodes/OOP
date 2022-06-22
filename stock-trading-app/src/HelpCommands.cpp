@@ -31,7 +31,7 @@ std::cout << "The available commands are help, help <cmd>, avg, time, step, min,
     }
     else if (cmd == "max")
     {
-        std::cout << "advisorbot> Enter min prodcut <order type> e.g. max ETH/BTC ask " <<std::endl;
+        std::cout << "advisorbot> Enter max prodcut <order type> e.g. max ETH/BTC ask " <<std::endl;
         std::cout <<  "advisorbot> Purpose: find maximum bid or ask for product in current time step" <<std::endl;
     }
     else if (cmd == "avg")
