@@ -142,31 +142,66 @@ double OrderBook::predict(const std::string& product, const std::string& currenT
         timeStamps_steps.push_back(timestamp[k]);
         -- timeSteps;
     }
-    // for (int i = 0; i < orders.size(); ++i){
-    //     for (int j = 0; j < timeStamps_steps.size(); ++j){
-    //         if (orders[i].timestamp == timeStamps_steps[j]){
-    //             if (orders[i].orderType == orderType){
-    //                 if (orders[i].product == product){
-    //                     sum+= OrderBook::getHighPrice(OrderBook::getOrders(orderType, product, timeStamps_steps[j]))* orders[i].amount  ;
-    //                     length+= orders[i].amount ;
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
     for (int j = 0; j < timeStamps_steps.size(); ++j){
                         if (minOrMax == "max" )
                         sum+= OrderBook::getHighPrice(OrderBook::getOrders(orderType, product, timeStamps_steps[j])) ;
                         if (minOrMax == "min")
                         sum+= OrderBook::getLowPrice(OrderBook::getOrders(orderType, product, timeStamps_steps[j])) ;
                         ++length ;
-                    
-                
-            
         }
 
 std::cout << "predicted price is  "<< sum / length << " based on the last "<< length<<std::endl;  
+return 0;
+}
+double OrderBook::recordEntry(const std::string& product, 
+                              const std::string& currenTime, 
+                              const int& steps,
+                              const OrderBookType& orderType, 
+                              const std::string& minOrMax)
+{
+    int timeSteps = steps;
+    std::vector<std::string> timestamp;
+    double sum = 0;
+    double  length = 0;
+    std::map<std::string,bool> stampMap;
+    std::vector<std::string> timeStamps_steps;
+    std::cout << "time steps before: "<<timeSteps << std::endl;
+
+    for (OrderBookEntry& e : orders)
+    {
+        stampMap[e.timestamp] = true;
+    }
+    for (auto const& e : stampMap)
+    {
+        if ( e.first <= currenTime)
+        {
+            timestamp.push_back(e.first);
+        }
+        
+    }
+    std::sort(timestamp.begin(), timestamp.end(), OrderBookEntry::reverseCompare);
+
+    for ( int k = 0; k < timestamp.size() ; ++k)
+    {
+        if ( timeSteps < 0)
+            break;
+        
+        timeStamps_steps.push_back(timestamp[k]);
+        -- timeSteps;
+    }
+    for (int i = 0; i < orders.size(); ++i){
+        for (int j = 0; j < timeStamps_steps.size(); ++j){
+            if (orders[i].timestamp == timeStamps_steps[j]){
+                if (orders[i].orderType == orderType){
+                    if (orders[i].product == product){
+                        sum+= orders[i].price * orders[i].amount  ;
+                        length+= orders[i].amount ;
+                    }
+                }
+            }
+        }
+    }
+std::cout << "average is: "<< sum / length << " length "<< length<<std::endl;  
 return 0;
 }
 
