@@ -254,6 +254,12 @@ void MerkelMain::processUserOption(const std::string& userOption)
                 {
                     orderBook.predict(tokens[2], currentTime, OrderBookEntry::stringToOrderBookType(tokens[3]), tokens[1]);
                 }
+            }
+        if (tokens.size()== 5){
+            if (tokens[0] == "record")
+            {
+                orderBook.recordEntry("BTC/USDT",currentTime, 3,OrderBookEntry::stringToOrderBookType(tokens[2]), "min" );
+            }
         }
         
     }

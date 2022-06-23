@@ -112,7 +112,7 @@ return 0;
 
 double OrderBook::predict(const std::string& product, const std::string& currenTime, const OrderBookType& orderType, const std::string& minOrMax )
 {
-      int timeSteps = 10;
+    int timeSteps = 10;
     std::vector<std::string> timestamp;
     double sum = 0;
     double  length = 0;
@@ -159,7 +159,12 @@ double OrderBook::recordEntry(const std::string& product,
                               const OrderBookType& orderType, 
                               const std::string& minOrMax)
 {
+
+    std::cout <<" you're already here" <<std::endl;
     int timeSteps = steps;
+    double minMax = 0;
+    double temp = 0;
+    
     std::vector<std::string> timestamp;
     double sum = 0;
     double  length = 0;
@@ -189,20 +194,31 @@ double OrderBook::recordEntry(const std::string& product,
         timeStamps_steps.push_back(timestamp[k]);
         -- timeSteps;
     }
-    for (int i = 0; i < orders.size(); ++i){
-        for (int j = 0; j < timeStamps_steps.size(); ++j){
-            if (orders[i].timestamp == timeStamps_steps[j]){
-                if (orders[i].orderType == orderType){
-                    if (orders[i].product == product){
-                        sum+= orders[i].price * orders[i].amount  ;
-                        length+= orders[i].amount ;
-                    }
-                }
-            }
+
+    if (minOrMax == "max" )
+        minMax = OrderBook::getHighPrice(OrderBook::getOrders(orderType, product, currenTime));
+    
+    if (minOrMax == "min" )
+        minMax = OrderBook::getLowPrice(OrderBook::getOrders(orderType, product, currenTime));
+
+
+    for (int j = 0; j < timeStamps_steps.size(); ++j){
+                        if (minOrMax == "max" ){
+                            temp = OrderBook::getHighPrice(OrderBook::getOrders(orderType, product, timeStamps_steps[j]));
+                            if (temp > minMax ) 
+                            minMax = temp;
+                              
+                        }
+                        
+                        if (minOrMax == "min" ){
+                            temp = OrderBook::getLowPrice(OrderBook::getOrders(orderType, product, timeStamps_steps[j]));
+                            if (temp < minMax ) 
+                            minMax = temp;
+                              
+                        }
         }
-    }
-std::cout << "average is: "<< sum / length << " length "<< length<<std::endl;  
-return 0;
+    std::cout << "the lowest is: " << minMax <<std::endl;
+        return 0;
 }
 
 double OrderBook::getLowPrice(const std::vector<OrderBookEntry>& orders)
