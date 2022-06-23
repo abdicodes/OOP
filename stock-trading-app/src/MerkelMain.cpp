@@ -248,7 +248,7 @@ void MerkelMain::processUserOption(const std::string& userOption)
             // &&
             //     MerkelMain::productValidator(orderBook.getKnownProducts(), tokens[1])  )
             {
-                orderBook.getAvg("BTC/USDT",currentTime,0, OrderBookType::ask);
+                orderBook.getAvg(tokens[1],currentTime,0, OrderBookEntry::stringToOrderBookType(tokens[2]));
             }
              if (tokens[0] == "predict" )
                 {
@@ -258,7 +258,7 @@ void MerkelMain::processUserOption(const std::string& userOption)
         if (tokens.size()== 5){
             if (tokens[0] == "record")
             {
-                orderBook.recordEntry("BTC/USDT",currentTime, 3,OrderBookEntry::stringToOrderBookType(tokens[2]), "min" );
+                orderBook.recordEntry(tokens[1],currentTime, std::stoi(tokens[4]),OrderBookEntry::stringToOrderBookType(tokens[2]), tokens[3] );
             }
         }
         
