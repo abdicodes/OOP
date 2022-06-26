@@ -42,7 +42,7 @@ std::cout << "The available commands are: help, help <cmd>: avg, time, step, min
     }
     else if (cmd == "predict")
     {
-        std::cout << "advisorbot> Enter predict <max/min> product <order type> e.g. predcit max ETH/BTC ask" <<std::endl;
+        std::cout << "advisorbot> Enter predict <max/min> product <order type> e.g. predict max ETH/BTC ask" <<std::endl;
         std::cout <<  "advisorbot> Purpose: predict max or min ask or bid for the sent product for the next timestep" <<std::endl;
     }
      else if (cmd == "time")
@@ -64,17 +64,13 @@ std::cout << "The available commands are: help, help <cmd>: avg, time, step, min
 
 bool HelpCommands::helpMenuValidator(const std::string& cmd)
 {
-    // if cmd == 
-
+ 
     std::vector<std::string> commands;
     commands.insert(commands.end(), {"prod", "min", "max", "ask", "bid", "time", "step", "cmd", "avg", "predict", "record"});
 
     for (const std::string& e:commands){
         if (e== cmd)
         return true;
-        
-        
-
     }
     return false;
 }
