@@ -6,7 +6,6 @@
 #include <iostream>
 #include <numeric>
 
-
 /** construct, reading a csv data file */
 OrderBook::OrderBook(std::string filename)
 {
@@ -39,6 +38,9 @@ std::vector<OrderBookEntry> OrderBook::getOrders(const OrderBookType& type,
                                                 const std::string& timestamp)
 {
     std::vector<OrderBookEntry> orders_sub;
+
+
+
     for (const OrderBookEntry& e : orders)
     {
         if (e.orderType == type && 
@@ -70,7 +72,6 @@ double OrderBook::getAvg( const std::string& product, const std::string& currenT
     double  length = 0;
     std::map<std::string,bool> stampMap;
     std::vector<std::string> timeStamps_steps;
-    std::cout << "time steps before: "<<timeSteps << std::endl;
 
     for (OrderBookEntry& e : orders)
     {
@@ -106,7 +107,7 @@ double OrderBook::getAvg( const std::string& product, const std::string& currenT
             }
         }
     }
-std::cout << "average is: "<< sum / length << " length "<< length<<std::endl;  
+std::cout << "advisorbot> average is: "<< sum / length<<std::endl;  
 return 0;
 }
 
@@ -118,7 +119,7 @@ double OrderBook::predict(const std::string& product, const std::string& currenT
     double  length = 0;
     std::map<std::string,bool> stampMap;
     std::vector<std::string> timeStamps_steps;
-    std::cout << "time steps before: "<<timeSteps << std::endl;
+   
 
     for (OrderBookEntry& e : orders)
     {
@@ -150,7 +151,7 @@ double OrderBook::predict(const std::string& product, const std::string& currenT
                         ++length ;
         }
 
-std::cout << "predicted price is  "<< sum / length << " based on the last "<< length<<std::endl;  
+std::cout << "advisorbot> predicted price is  "<< sum / length << " based on the last " << length << " steps" <<std::endl;  
 return 0;
 }
 double OrderBook::recordEntry(const std::string& product, 
@@ -159,18 +160,14 @@ double OrderBook::recordEntry(const std::string& product,
                               const OrderBookType& orderType, 
                               const std::string& minOrMax)
 {
-
-    std::cout <<" you're already here" <<std::endl;
     int timeSteps = steps;
     double minMax = 0;
     double temp = 0;
-    
     std::vector<std::string> timestamp;
     double sum = 0;
     double  length = 0;
     std::map<std::string,bool> stampMap;
     std::vector<std::string> timeStamps_steps;
-    std::cout << "time steps before: "<<timeSteps << std::endl;
 
     for (OrderBookEntry& e : orders)
     {
@@ -217,7 +214,7 @@ double OrderBook::recordEntry(const std::string& product,
                               
                         }
         }
-    std::cout << "the lowest is: " << minMax <<std::endl;
+    std::cout << "advisorbot> the record  " << minOrMax << " price is: "<< minMax<<std::endl;
         return 0;
 }
 
@@ -254,123 +251,3 @@ std::string OrderBook::getNextTime(std::string timestamp)
     return next_timestamp;
 }
 
-void OrderBook::insertOrder(OrderBookEntry& order)
-{
-    orders.push_back(order);
-    std::sort(orders.begin(), orders.end(), OrderBookEntry::compareByTimestamp);
-}
-
-std::vector<OrderBookEntry> OrderBook::matchAsksToBids(std::string product, std::string timestamp)
-{
-// asks = orderbook.asks
-    std::vector<OrderBookEntry> asks = getOrders(OrderBookType::ask, 
-                                                 product, 
-                                                 timestamp);
-// bids = orderbook.bids
-    std::vector<OrderBookEntry> bids = getOrders(OrderBookType::bid, 
-                                                 product, 
-                                                    timestamp);
-
-    // sales = []
-    std::vector<OrderBookEntry> sales; 
-
-    // I put in a little check to ensure we have bids and asks
-    // to process.
-    if (asks.size() == 0 || bids.size() == 0)
-    {
-        std::cout << " OrderBook::matchAsksToBids no bids or asks" << std::endl;
-        return sales;
-    }
-
-    // sort asks lowest first
-    std::sort(asks.begin(), asks.end(), OrderBookEntry::compareByPriceAsc);
-    // sort bids highest first
-    std::sort(bids.begin(), bids.end(), OrderBookEntry::compareByPriceDesc);
-    // for ask in asks:
-    std::cout << "max ask " << asks[asks.size()-1].price << std::endl;
-    std::cout << "min ask " << asks[0].price << std::endl;
-    std::cout << "max bid " << bids[0].price << std::endl;
-    std::cout << "min bid " << bids[bids.size()-1].price << std::endl;
-    
-    for (OrderBookEntry& ask : asks)
-    {
-    //     for bid in bids:
-        for (OrderBookEntry& bid : bids)
-        {
-    //         if bid.price >= ask.price # we have a match
-            if (bid.price >= ask.price)
-            {
-    //             sale = new order()
-    //             sale.price = ask.price
-            OrderBookEntry sale{ask.price, 0, timestamp, 
-                product, 
-                OrderBookType::asksale};
-
-                if (bid.username == "simuser")
-                {
-                    sale.username = "simuser";
-                    sale.orderType = OrderBookType::bidsale;
-                }
-                if (ask.username == "simuser")
-                {
-                    sale.username = "simuser";
-                    sale.orderType =  OrderBookType::asksale;
-                }
-            
-    //             # now work out how much was sold and 
-    //             # create new bids and asks covering 
-    //             # anything that was not sold
-    //             if bid.amount == ask.amount: # bid completely clears ask
-                if (bid.amount == ask.amount)
-                {
-    //                 sale.amount = ask.amount
-                    sale.amount = ask.amount;
-    //                 sales.append(sale)
-                    sales.push_back(sale);
-    //                 bid.amount = 0 # make sure the bid is not processed again
-                    bid.amount = 0;
-    //                 # can do no more with this ask
-    //                 # go onto the next ask
-    //                 break
-                    break;
-                }
-    //           if bid.amount > ask.amount:  # ask is completely gone slice the bid
-                if (bid.amount > ask.amount)
-                {
-    //                 sale.amount = ask.amount
-                    sale.amount = ask.amount;
-    //                 sales.append(sale)
-                    sales.push_back(sale);
-    //                 # we adjust the bid in place
-    //                 # so it can be used to process the next ask
-    //                 bid.amount = bid.amount - ask.amount
-                    bid.amount =  bid.amount - ask.amount;
-    //                 # ask is completely gone, so go to next ask                
-    //                 break
-                    break;
-                }
-
-
-    //             if bid.amount < ask.amount # bid is completely gone, slice the ask
-                if (bid.amount < ask.amount && 
-                   bid.amount > 0)
-                {
-    //                 sale.amount = bid.amount
-                    sale.amount = bid.amount;
-    //                 sales.append(sale)
-                    sales.push_back(sale);
-    //                 # update the ask
-    //                 # and allow further bids to process the remaining amount
-    //                 ask.amount = ask.amount - bid.amount
-                    ask.amount = ask.amount - bid.amount;
-    //                 bid.amount = 0 # make sure the bid is not processed again
-                    bid.amount = 0;
-    //                 # some ask remains so go to the next bid
-    //                 continue
-                    continue;
-                }
-            }
-        }
-    }
-    return sales;             
-}

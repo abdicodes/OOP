@@ -8,9 +8,10 @@ HelpCommands::HelpCommands ()
 {
 
 }
+
 void HelpCommands::helpMenuHandler( const std::string& help)
 {
-std::cout << "The available commands are help, help <cmd>, avg, time, step, min, max, prod, predict" << std::endl;
+std::cout << "The available commands are: help, help <cmd>: avg, time, step, min, max, prod, predict, record" << std::endl;
 }
  void HelpCommands::helpMenuHandler( const std::string& help ,const std::string& cmd) 
 
@@ -52,6 +53,28 @@ std::cout << "The available commands are help, help <cmd>, avg, time, step, min,
     {
         std::cout << "advisorbot> Enter step to move to next time step" <<std::endl;
     }
+    else if (cmd == "record"){
+        std::cout << "advisorbot> Enter record <max/min> product <order type> <time steps>" << std::endl;
+         std::cout << "advisorbot> e.g. record max ETH/BTC ask 5" <<std::endl;
+        std::cout <<  "advisorbot> Purpose: show the lowest or highest record price over time steps" <<std::endl;
+    }
     else 
         std::cout << "advisorbot> Command is not found Enter help to list all available commands" << std::endl;
+}
+
+bool HelpCommands::helpMenuValidator(const std::string& cmd)
+{
+    // if cmd == 
+
+    std::vector<std::string> commands;
+    commands.insert(commands.end(), {"prod", "min", "max", "ask", "bid", "time", "step", "cmd", "avg", "predict", "record"});
+
+    for (const std::string& e:commands){
+        if (e== cmd)
+        return true;
+        
+        
+
+    }
+    return false;
 }

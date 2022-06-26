@@ -8,7 +8,7 @@ CSVReader::CSVReader()
 
 }
 
-std::vector<OrderBookEntry> CSVReader::readCSV(std::string csvFilename)
+std::vector<OrderBookEntry> CSVReader::readCSV(const std::string& csvFilename)
 {
     std::vector<OrderBookEntry> entries;
 
@@ -32,7 +32,7 @@ std::vector<OrderBookEntry> CSVReader::readCSV(std::string csvFilename)
     return entries; 
 }
 
-std::vector<std::string> CSVReader::tokenise( std::string csvLine, char separator)
+std::vector<std::string> CSVReader::tokenise( const std::string& csvLine ,  const char& separator)
 {
    std::vector<std::string> tokens;
    signed int start, end;
@@ -50,7 +50,7 @@ std::vector<std::string> CSVReader::tokenise( std::string csvLine, char separato
    return tokens; 
 }
 
-OrderBookEntry CSVReader::stringsToOBE(std::vector<std::string> tokens)
+OrderBookEntry CSVReader::stringsToOBE(const std::vector<std::string>& tokens)
 {
     double price, amount;
 
@@ -79,27 +79,27 @@ OrderBookEntry CSVReader::stringsToOBE(std::vector<std::string> tokens)
 }
 
 
-OrderBookEntry CSVReader::stringsToOBE(std::string priceString, 
-                                    std::string amountString, 
-                                    std::string timestamp, 
-                                    std::string product, 
-                                    OrderBookType orderType)
-{
-    double price, amount;
-    try {
-         price = std::stod(priceString);
-         amount = std::stod(amountString);
-    }catch(const std::exception& e){
-        std::cout << "CSVReader::stringsToOBE Bad float! " << priceString<< std::endl;
-        std::cout << "CSVReader::stringsToOBE Bad float! " << amountString<< std::endl; 
-        throw;        
-    }
-    OrderBookEntry obe{price, 
-                    amount, 
-                    timestamp,
-                    product, 
-                    orderType};
+// OrderBookEntry CSVReader::stringsToOBE( const std::string& priceString, 
+//                                         const std::string& amountString, 
+//                                         const std::string& timestamp, 
+//                                         const std::string& product, 
+//                                         const OrderBookType& orderType)
+// {
+//     double price, amount;
+//     try {
+//          price = std::stod(priceString);
+//          amount = std::stod(amountString);
+//     }catch(const std::exception& e){
+//         std::cout << "CSVReader::stringsToOBE Bad float! " << priceString<< std::endl;
+//         std::cout << "CSVReader::stringsToOBE Bad float! " << amountString<< std::endl; 
+//         throw;        
+//     }
+//     OrderBookEntry obe{price, 
+//                     amount, 
+//                     timestamp,
+//                     product, 
+//                     orderType};
                 
-    return obe;
-}
+//     return obe;
+// }
      
