@@ -4,10 +4,14 @@
 #include "OrderBookEntry.h"
 #include "CSVReader.h"
 #include "HelpCommands.h"
+
+//constructer function
 AdvisorBotMain::AdvisorBotMain()
 {
 std::cout << " #### Welcome to advisorbot app, your simple analytic app #### " << std::endl;
 }
+
+//this will initialise the interface.
 void AdvisorBotMain::init()
 {
     std::string input;
@@ -21,7 +25,7 @@ void AdvisorBotMain::init()
     }
 }
 
-
+//this function will run after each process.
 void AdvisorBotMain::printMenu()
 {
 
@@ -41,11 +45,13 @@ std::string AdvisorBotMain::getUserOption()
     return line;
 }
 
+// this is the parsing function that will take user input string and processes it.
 void AdvisorBotMain::processUserOption(const std::string& userOption)
 {
-    std::vector<std::string> tokens = CSVReader::tokenise( userOption , ' ');
-
     try{
+        // tokenising function 
+        std::vector<std::string> tokens = CSVReader::tokenise( userOption , ' ');
+
         if (tokens.size() == 1){
             if (tokens[0]== "prod")
             {
@@ -132,7 +138,7 @@ void AdvisorBotMain::processUserOption(const std::string& userOption)
     }
         
 }
-
+//this function will validate the currency-pair product
 bool AdvisorBotMain::productValidator(const std::vector<std::string>& entries, const std::string& tokenInput)
 {
 

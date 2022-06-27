@@ -8,11 +8,14 @@ HelpCommands::HelpCommands ()
 {
 
 }
-
+//this function will stream to terminal a help menu.
 void HelpCommands::helpMenuHandler( const std::string& help)
 {
+
 std::cout << "The available commands are: help, help <cmd>: avg, time, step, min, max, prod, predict, record" << std::endl;
 }
+
+// this function will take help and a command as parameters and stream the appropriate help instructions.
  void HelpCommands::helpMenuHandler( const std::string& help ,const std::string& cmd) 
 
  
@@ -61,7 +64,7 @@ std::cout << "The available commands are: help, help <cmd>: avg, time, step, min
     else 
         std::cout << "advisorbot> Command is not found Enter help to list all available commands" << std::endl;
 }
-
+//this function will validate if command string exists.
 bool HelpCommands::helpMenuValidator(const std::string& cmd)
 {
  

@@ -63,7 +63,7 @@ double OrderBook::getHighPrice(const std::vector<OrderBookEntry>& orders)
     }
     return max;
 }
-
+// this function will return the average 
 double OrderBook::getAvg( const std::string& product, const std::string& currenTime, const  int& steps, const OrderBookType& orderType  )
 {
     int timeSteps = steps;
@@ -110,9 +110,10 @@ double OrderBook::getAvg( const std::string& product, const std::string& currenT
 std::cout << "advisorbot> average is: "<< sum / length<<std::endl;  
 return 0;
 }
-
-double OrderBook::predict(const std::string& product, const std::string& currenTime, const OrderBookType& orderType, const std::string& minOrMax )
+// this function will predict the value based on moving average.
+void OrderBook::predict(const std::string& product, const std::string& currenTime, const OrderBookType& orderType, const std::string& minOrMax )
 {
+    //init variables
     int timeSteps = 10;
     std::vector<std::string> timestamp;
     double sum = 0;
@@ -120,7 +121,7 @@ double OrderBook::predict(const std::string& product, const std::string& currenT
     std::map<std::string,bool> stampMap;
     std::vector<std::string> timeStamps_steps;
    
-
+// next few processes will parse time stamps and push them to a vector then sort it from current time to lower time stamps.
     for (OrderBookEntry& e : orders)
     {
         stampMap[e.timestamp] = true;
@@ -133,6 +134,7 @@ double OrderBook::predict(const std::string& product, const std::string& currenT
         }
         
     }
+    //sorting time stamps
     std::sort(timestamp.begin(), timestamp.end(), OrderBookEntry::reverseCompare);
 
     for ( int k = 0; k < timestamp.size() ; ++k)
@@ -143,6 +145,8 @@ double OrderBook::predict(const std::string& product, const std::string& currenT
         timeStamps_steps.push_back(timestamp[k]);
         -- timeSteps;
     }
+
+    // for loop to sum max or min prices over time stemps
     for (int j = 0; j < timeStamps_steps.size(); ++j){
                         if (minOrMax == "max" )
                         sum+= OrderBook::getHighPrice(OrderBook::getOrders(orderType, product, timeStamps_steps[j])) ;
@@ -150,9 +154,9 @@ double OrderBook::predict(const std::string& product, const std::string& currenT
                         sum+= OrderBook::getLowPrice(OrderBook::getOrders(orderType, product, timeStamps_steps[j])) ;
                         ++length ;
         }
-
+// sum/length will give us the average length is the number of time steps
 std::cout << "advisorbot> predicted price is  "<< sum / length << " based on the last " << length << " steps" <<std::endl;  
-return 0;
+
 }
 double OrderBook::recordEntry(const std::string& product, 
                               const std::string& currenTime, 
@@ -160,6 +164,8 @@ double OrderBook::recordEntry(const std::string& product,
                               const OrderBookType& orderType, 
                               const std::string& minOrMax)
 {
+
+    // similar structure to above function
     int timeSteps = steps;
     double minMax = 0;
     double temp = 0;
@@ -198,7 +204,7 @@ double OrderBook::recordEntry(const std::string& product,
     if (minOrMax == "min" )
         minMax = OrderBook::getLowPrice(OrderBook::getOrders(orderType, product, currenTime));
 
-
+//  for loop that checks every max or min price and stores the record entry into minMax variable
     for (int j = 0; j < timeStamps_steps.size(); ++j){
                         if (minOrMax == "max" ){
                             temp = OrderBook::getHighPrice(OrderBook::getOrders(orderType, product, timeStamps_steps[j]));

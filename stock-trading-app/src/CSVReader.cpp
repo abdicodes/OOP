@@ -7,7 +7,7 @@ CSVReader::CSVReader()
 {
 
 }
-
+//this function will read the CVS file, parse the data to DataBookEntry vector.
 std::vector<OrderBookEntry> CSVReader::readCSV(const std::string& csvFilename)
 {
     std::vector<OrderBookEntry> entries;
@@ -31,7 +31,7 @@ std::vector<OrderBookEntry> CSVReader::readCSV(const std::string& csvFilename)
     std::cout << "CSVReader::readCSV read " << entries.size() << " entries"  << std::endl;
     return entries; 
 }
-
+//this function will take a strings vector and return a vector
 std::vector<std::string> CSVReader::tokenise( const std::string& csvLine ,  const char& separator)
 {
    std::vector<std::string> tokens;
@@ -49,7 +49,7 @@ std::vector<std::string> CSVReader::tokenise( const std::string& csvLine ,  cons
 
    return tokens; 
 }
-
+// static function that will parse a single line and return a dataBookEntry object
 OrderBookEntry CSVReader::stringsToOBE(const std::vector<std::string>& tokens)
 {
     double price, amount;

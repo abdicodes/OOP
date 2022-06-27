@@ -29,7 +29,7 @@ class OrderBook
         static double getHighPrice(const std::vector<OrderBookEntry>& orders);
         static double getLowPrice(const std::vector<OrderBookEntry>& orders);
         double getAvg(const std::string& product, const std::string& currenTime, const int& steps, const OrderBookType& orderType );
-        double predict(const std::string& product, const std::string& currenTime, const OrderBookType& orderType, const std::string& minOrMax);
+        void predict(const std::string& product, const std::string& currenTime, const OrderBookType& orderType, const std::string& minOrMax);
         double recordEntry(const std::string& product, 
                            const std::string& currenTime, 
                            const int& steps,
